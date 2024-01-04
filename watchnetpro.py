@@ -7,7 +7,7 @@ Capture des paquets avec des sockets :
 
 import socket
 import struct
-
+from ip_packet import IPV4_PACKET
 def is_ipv4(packet):
     return packet[12:14] == b'\x08\x00'
 
@@ -83,11 +83,11 @@ print("En écoute des paquets...")
 try:
     while True:
         packet, addr = s.recvfrom(65535) # Recevoir un paquet
-        if is_ipv4(packet):
-            print("Paquet IPv4 détecté")
-            parse_ipv4_packet(packet)
-        else:
-            print("Paquet non-IP détecté")
+        # if is_ipv4(packet):
+        #     print("Paquet IPv4 détecté")
+        #     parse_ipv4_packet(packet)
+        # else:
+        #     print("Paquet non-IP détecté")
 except KeyboardInterrupt:
     print("Arrêt de l'écoute")
     s.close()
