@@ -7,7 +7,7 @@ Capture des paquets avec des sockets :
 
 import socket
 import struct
-from ip_packet import IPV4_PACKET
+from protocols.ip_packet import IPV4_PACKET
 def is_ipv4(packet):
     return packet[12:14] == b'\x08\x00'
 
