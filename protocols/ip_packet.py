@@ -194,9 +194,6 @@ class IPV4_PACKET:
 		self.id = id
 
 	
-	def is_ipv4(self):
-		return self.packet[12:14] == b'\x08\x00'
-	
 	def unpack_header(self,packet_header):
 		ip_header  = unpack('!BBHLBBH4s4s',packet_header)
 		version = ip_header[0] >> 4

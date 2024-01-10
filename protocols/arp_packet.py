@@ -44,9 +44,6 @@ class ARP_PACKET:
         self.packet = packet
         self.packet_header = packet[14:42]
         self.id = id
-
-    def is_arp(self):
-        return self.packet[12:14] == b'\x08\x06'
     
     def arp_type(self,number):
         if number == 1:
