@@ -3,7 +3,7 @@
 
 import socket
 from protocols.ip_packet import IPV4_PACKET
-from protocols.arp_packet import ARP_PACKET
+from protocols.arp_packet import ARPPacket
 from packets.packet import *
 import utils.colors
 
@@ -21,14 +21,17 @@ try:
         #     id+=1
         #     packet_class.pass_protocols()
         #     print(packet_class)
-        # arp_packet = ARP_PACKET(packet,id)
-        if packet_class.is_address_source("129.88.43.109"):
-            ipv4_packet = IPV4_PACKET(packet,id)
-            print(ipv4_packet)
-            packet_class.pass_protocols()
-            print(packet_class)
-        # if packet_class.is_arp() :
-        #     print(arp_packet)
+        arp_packet = ARPPacket(packet,id)
+        # if packet_class.is_address_source("129.88.43.109"):
+        #     ipv4_packet = IPV4_PACKET(packet,id)
+        #     print(ipv4_packet)
+        #     packet_class.pass_protocols()
+        #     print(packet_class)
+        if packet_class.is_arp() :
+            arp_packet.unpack_arp()
+            # print(arp_packet)
+            print(arp_packet.who_has_form())
+
         #     id+=1
         #     packet_class.pass_protocols()
         #     print(packet_class)

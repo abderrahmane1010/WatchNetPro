@@ -184,7 +184,7 @@ EtherType
 
 from struct import *
 import socket 
-from config import protocol_number
+from resources import application_layer_protocols as alp
 
 class IPV4_PACKET:
 	
@@ -213,4 +213,4 @@ class IPV4_PACKET:
 
 	def __str__(self):
 		version, header_length, total_length, protocol, source_address, destination_address = self.unpack_header(self.packet_header)
-		return f'{self.id} | {protocol_number.get(str(protocol), "Unknown")} | {source_address} -> {destination_address}'
+		return f'{self.id} | {alp.protocol_number.get(str(protocol), "Unknown")} | {source_address} -> {destination_address}'

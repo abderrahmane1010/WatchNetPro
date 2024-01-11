@@ -1,7 +1,7 @@
 import socket
 import resources.network_layer_protocols
-import resources.transport_layer_protocols
 import resources.application_layer_protocols
+import resources.transport_layer_protocols
 from struct import *
 import utils.colors
 
@@ -33,14 +33,14 @@ class Packet :
         if(network == b'\x08\x00'):
             header_length = ( self.ip_header[0] & 0x0F ) * 4
             transport = self.ip_header[5]
-            self.protocol_transport = resources.transport_layer_protocols.protocol_number.get(int(transport), "Undefined")
+            self.protocol_transport = resources.application_layer_protocols.protocol_number.get(int(transport), "Undefined")
             dest_port = int.from_bytes(self.packet[14+header_length+2:14+header_length+4], byteorder='big')
             self.number = dest_port
             if(transport == 6): # TCP
                 # tcp_header = unpack('!HHLLBBHHH', self.packet[14+header_length:14+header_length+20])
-                self.protocol_application = resources.application_layer_protocols.tcp_ports.get(dest_port, "Undefined")
+                self.protocol_application = resources.transport_layer_protocols.tcp_ports.get(dest_port, "Undefined")
             if(transport == 17): # UDP
-                self.protocol_application = resources.application_layer_protocols.udp_ports.get(dest_port, "Undefined")
+                self.protocol_application = resources.transport_layer_protocols.udp_ports.get(dest_port, "Undefined")
         return 0
             
         
