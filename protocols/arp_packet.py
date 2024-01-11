@@ -38,6 +38,7 @@ from struct import *
 from resources import network_layer_protocols as nlp
 import socket
 import utils.colors as c
+import netifaces
 
 from struct import unpack
 from resources import network_layer_protocols as nlp
@@ -46,7 +47,7 @@ import socket
 class ARPPacket:
     
     ip_mac_mapping = {}
-    ARP_POISONING_DETECTION = True
+    ARP_POISONING_DETECTION = False
     """Classe pour analyser les paquets ARP."""
     def __init__(self, packet, id):
         self.packet = packet
@@ -113,13 +114,32 @@ class ARPPacket:
         """Convertit les données en chaîne hexadécimale."""
         return ':'.join(f'{byte:02x}' for byte in data)
 
-    def who_has_form(self):
-        if self.operation == 1 :
-            return f'{c.colorize("[Request]","magenta")} Who has {c.colorize(self.to_protocol, "info")} ? Tell {c.colorize(self.from_protocol,"ok")}'
-        elif self.operation == 2:
-            return f'{c.colorize("[Replay]","cyan")} {c.colorize(self.from_protocol, "ok")} is at {c.colorize(self.from_hard, "warning")}'
+    def is_gateway(self, ip_address):
+        for gateway, interface, true_false in netifaces.gateways()[netifaces.AF_INET]:
+            if ip_address == gateway :
+                return True
+        return False
+
+
+    def address_to_gateway(self, ip_address):
+        interface_gateway = ""
+        for gateway, interface, true_false in netifaces.gateways()[netifaces.AF_INET]:
+            if ip_address == gateway :
+                interface_gateway = interface
+        if self.is_gateway(ip_address) :
+            return f'Gateway [{interface_gateway[0:8]}]'
         else :
-            return f''
+            return ip_address
+    
+    def who_has_form(self):
+        phrase = f''
+        if self.operation == 1 :
+            phrase+= f'{c.colorize("[Request]","magenta")} Who has {c.colorize(self.address_to_gateway(self.to_protocol), "info")} ? Tell {c.colorize(self.address_to_gateway(self.from_protocol),"ok")}'
+        elif self.operation == 2:
+            phrase+=  f'{c.colorize("[Replay]","cyan")} {c.colorize(self.address_to_gateway(self.from_protocol), "ok")} is at {c.colorize(self.from_hard, "warning")}'
+        else :
+            phrase+=  f''
+        return phrase
         
     def __str__(self):
         return f'{self.hard_type} | {self.protocol_type} | {self.length_hard} | {self.length_protocol} | {ARPPacket.arp_type(self.operation)} | {self.from_hard} | {self.from_protocol} | {self.to_hard} | {self.to_protocol}'
