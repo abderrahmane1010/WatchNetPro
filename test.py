@@ -2,7 +2,6 @@
 
 
 import socket
-from protocols.ip_packet import IPV4_PACKET
 from protocols.arp_packet import ARPPacket
 from packets.packet import *
 import netifaces

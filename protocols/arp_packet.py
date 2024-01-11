@@ -133,7 +133,7 @@ class ARPPacket:
             
     
     def who_has_form(self):
-        phrase = f'{self.id}\t'
+        phrase = f'{self.id} '
         if self.operation == 1 :
             phrase+= f'{c.colorize("[Request]","magenta")} Who has {c.colorize(self.address_to_gateway(self.to_protocol), "info")} ? Tell {c.colorize(self.address_to_gateway(self.from_protocol),"ok")}'
         elif self.operation == 2:
