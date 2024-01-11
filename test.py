@@ -11,8 +11,8 @@ import utils.colors
 s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
 gateway = netifaces.gateways()['default'][netifaces.AF_INET][1]
 ip_address = netifaces.ifaddresses(gateway)[netifaces.AF_INET][0]['addr']
+print(f'Capturing on "{gateway}"')
 
-print(netifaces.gateways()[netifaces.AF_INET][1][1])
 id = 1
 
 try:
@@ -36,7 +36,7 @@ try:
             # print(arp_packet)
             print(arp_packet.who_has_form())
 
-        #     id+=1
+            id+=1
         #     packet_class.pass_protocols()
         #     print(packet_class)
 except KeyboardInterrupt:

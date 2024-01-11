@@ -40,10 +40,6 @@ import socket
 import utils.colors as c
 import netifaces
 
-from struct import unpack
-from resources import network_layer_protocols as nlp
-import socket
-
 class ARPPacket:
     
     ip_mac_mapping = {}
@@ -129,10 +125,15 @@ class ARPPacket:
         if self.is_gateway(ip_address) :
             return f'Gateway [{interface_gateway[0:8]}]'
         else :
-            return ip_address
+            try:
+                hostname, _, _ = socket.gethostbyaddr(ip_address)
+                return hostname
+            except socket.herror as e:
+                return ip_address
+            
     
     def who_has_form(self):
-        phrase = f''
+        phrase = f'{self.id}\t'
         if self.operation == 1 :
             phrase+= f'{c.colorize("[Request]","magenta")} Who has {c.colorize(self.address_to_gateway(self.to_protocol), "info")} ? Tell {c.colorize(self.address_to_gateway(self.from_protocol),"ok")}'
         elif self.operation == 2:
